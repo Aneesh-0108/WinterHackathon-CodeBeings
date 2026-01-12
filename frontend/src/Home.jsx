@@ -1,90 +1,124 @@
-function Home({ onLoginClick }) {
-  return (
-    <div className="landing-page">
-      <div className="landing-card">
-        <h1>Cloud Companion ☁️</h1>
+import { useState } from "react";
 
-        <p className="tagline">
-          Hybrid AI Chatbot for Google Cloud Arcade & Skill Boost
-        </p>
+function Home({ onLoginClick }) {
+  const [section, setSection] = useState("home");
+
+  return (
+    <div className="home-wrapper">
+      {/* ======================
+          SIDEBAR
+      ====================== */}
+      <aside className="home-sidebar">
+        <div className="project-title">Arcade Companion</div>
+
+        {["home", "about", "architecture", "team", "links"].map((item) => (
+          <button
+            key={item}
+            className={`nav-btn ${section === item ? "active" : ""}`}
+            onClick={() => setSection(item)}
+          >
+            {item.toUpperCase()}
+          </button>
+        ))}
+      </aside>
+
+      {/* ======================
+          MAIN CONTENT
+      ====================== */}
+      <main className="home-content">
+        {/* HOME */}
+        {section === "home" && (
+          <div className="fade">
+            <h1 className="hero-text">
+              Hybrid AI Chatbot <br />
+              for Google Cloud Arcade & Skill Boost
+            </h1>
+
+            <button
+              className="cta-btn"
+              onClick={() => {
+                if (typeof onLoginClick === "function") {
+                  onLoginClick();
+                }
+              }}
+            >
+              getStarted();
+            </button>
+
+            {/* SAMPLE CARDS */}
+            <div className="sample-grid">
+              <div className="sample-card">
+                <h4>Profile & Verification</h4>
+                <p>Fix profile visibility, verification, and email issues.</p>
+              </div>
+
+              <div className="sample-card">
+                <h4>Labs & Progress</h4>
+                <p>Resolve lab errors, timers, region mismatch, and badges.</p>
+              </div>
+
+              <div className="sample-card">
+                <h4>Safe Escalation</h4>
+                <p>Account‑specific issues are escalated responsibly.</p>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* ABOUT */}
-        <section className="landing-section">
-          <h3>🚀 What is this project?</h3>
-          <p>
-            Cloud Companion is a responsible hybrid chatbot that helps Google
-            Cloud Arcade & Skill Boost users get instant answers to common
-            queries while safely escalating account-specific issues.
-          </p>
-        </section>
+        {section === "about" && (
+          <div className="fade">
+            <h2>About</h2>
+            <p>
+              Arcade Companion is a responsible hybrid chatbot designed to
+              assist Google Cloud Arcade & Skill Boost users with instant help
+              while safely escalating sensitive issues.
+            </p>
+          </div>
+        )}
 
         {/* ARCHITECTURE */}
-        <section className="landing-section">
-          <h3>🏗️ Architecture Overview</h3>
-          <ul>
-            <li>React frontend for clean user experience</li>
-            <li>Express backend with strict separation of concerns</li>
-            <li>Rule-based intent detection</li>
-            <li>AI fallback for unresolved queries</li>
-            <li>Safe escalation for sensitive issues</li>
-          </ul>
+        {section === "architecture" && (
+          <div className="fade">
+            <h2>Architecture Flow</h2>
 
-          <a href="#" className="link-btn" onClick={(e) => e.preventDefault()}>
-            View Architecture →
-          </a>
-        </section>
+            <div className="arch-flow">
+              <div className="arch-box">React Frontend</div>
+              <span>↓</span>
+              <div className="arch-box">Backend Core API</div>
+              <span>↓</span>
+              <div className="arch-box">Intent Logic + Dataset</div>
+              <span>↓</span>
+              <div className="arch-box">AI / Escalation Layer</div>
+            </div>
+
+            <p className="arch-note">
+              (This replaces placeholder images with a clear flow diagram.)
+            </p>
+          </div>
+        )}
 
         {/* TEAM */}
-        <section className="landing-section">
-          <h3>👥 Team</h3>
-
-          <div className="team-grid">
-            <div className="team-card">
-              <h4>Deekshith Shetty</h4>
-              <p>Frontend Developer</p>
-            </div>
-
-            <div className="team-card">
-              <h4>Aneesh Hebbar</h4>
-              <p>Backend Core Developer</p>
-            </div>
-
-            <div className="team-card">
-              <h4>Akshaj Shetty</h4>
-              <p>Data & Knowledge Engineer</p>
+        {section === "team" && (
+          <div className="fade">
+            <h2>Team</h2>
+            <div className="team-grid">
+              <div className="team-card">Deekshith – Frontend</div>
+              <div className="team-card">Aneesh – Backend Core</div>
+              <div className="team-card">Akshaj – Data</div>
             </div>
           </div>
-        </section>
+        )}
 
         {/* LINKS */}
-        <section className="landing-section">
-          <h3>🔗 Links</h3>
-
-          <div className="link-group">
-            <a
-              href="https://github.com/your-org/your-repo"
-              target="_blank"
-              rel="noreferrer"
-              className="link-btn"
-            >
-              GitHub Repository
-            </a>
-
-            <a
-              href="#"
-              className="link-btn secondary"
-              onClick={(e) => e.preventDefault()}
-            >
-              Live Demo (Coming Soon)
-            </a>
+        {section === "links" && (
+          <div className="fade">
+            <h2>Links</h2>
+            <button className="link-btn">GitHub Repo</button>
+            <button className="link-btn secondary">Live Demo (Soon)</button>
           </div>
-        </section>
-
-        {/* LOGIN */}
-        <button className="login-btn" onClick={onLoginClick}>
-          Login to Continue →
-        </button>
-      </div>
+        )}
+      </main>
     </div>
   );
 }

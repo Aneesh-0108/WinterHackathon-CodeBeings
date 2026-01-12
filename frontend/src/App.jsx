@@ -3,10 +3,8 @@ import Home from "./Home";
 import Login from "./Login";
 
 function App() {
-  /* ======================
-     PAGE FLOW
-  ====================== */
-  const [showLanding, setShowLanding] = useState(true);
+  // 🆕 Track current page for browser navigation
+  const [page, setPage] = useState("home");
 
   /* ======================
      AUTH
@@ -50,12 +48,29 @@ function App() {
     if (savedUser) {
       setUsername(savedUser);
       setIsLoggedIn(true);
-      setShowLanding(false); // skip Home if already logged in
+      setPage("chat"); // 🆕 restore page
+      window.history.replaceState({ page: "chat" }, "");
+    } else {
+      window.history.replaceState({ page: "home" }, "");
     }
 
     if (savedTheme) {
       setDarkMode(savedTheme === "dark");
     }
+  }, []);
+
+  /* ======================
+     BROWSER BACK / FORWARD
+  ====================== */
+  useEffect(() => {
+    const handlePopState = (e) => {
+      if (e.state?.page) {
+        setPage(e.state.page);
+      }
+    };
+
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
   }, []);
 
   /* ======================
@@ -105,6 +120,8 @@ function App() {
   function handleLogin(user) {
     setUsername(user);
     setIsLoggedIn(true);
+    setPage("chat"); // 🆕
+    window.history.pushState({ page: "chat" }, "");
   }
 
   function handleLogoutConfirmed() {
@@ -114,7 +131,9 @@ function App() {
     setChats([]);
     setCurrentChatId(null);
     setConfirmLogout(false);
-    setShowLanding(true);
+
+    setPage("home"); // 🆕
+    window.history.pushState({ page: "home" }, "");
   }
 
   /* ======================
@@ -171,7 +190,7 @@ function App() {
     setTimeout(() => {
       const botReply = {
         sender: "bot",
-        text: "🤖 This is a frontend demo reply.",
+        text: "🤖 Backend integration coming next.",
       };
 
       setChats((prev) =>
@@ -187,21 +206,34 @@ function App() {
   }
 
   /* ======================
-     PAGE ROUTING (STATE)
+     PAGE RENDERING (WITH ANIMATION)
   ====================== */
-  if (showLanding) {
-    return <Home onLoginClick={() => setShowLanding(false)} />;
+  if (page === "home") {
+    return (
+      <div className="page fade-in">
+        <Home
+          onLoginClick={() => {
+            setPage("login");
+            window.history.pushState({ page: "login" }, "");
+          }}
+        />
+      </div>
+    );
   }
 
-  if (!isLoggedIn) {
-    return <Login onLogin={handleLogin} />;
+  if (page === "login") {
+    return (
+      <div className="page fade-in">
+        <Login onLogin={handleLogin} />
+      </div>
+    );
   }
 
   /* ======================
      CHAT UI
   ====================== */
   return (
-    <div className={`layout ${darkMode ? "dark" : ""}`}>
+    <div className={`layout fade-in ${darkMode ? "dark" : ""}`}>
       {/* SIDEBAR */}
       <div className="sidebar">
         <div className="sidebar-header">

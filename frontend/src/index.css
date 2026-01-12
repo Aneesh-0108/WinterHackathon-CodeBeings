@@ -610,3 +610,506 @@ body {
     font-size: 14px;
   }
 }
+/* ================================
+   HOME PAGE – V1
+================================ */
+
+.home-page {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  background: #020617; /* deep black variant */
+  color: #e5e7eb;
+}
+
+/* ================================
+   SIDEBAR
+================================ */
+
+.home-sidebar {
+  width: 260px;
+  padding: 28px 18px;
+  background: #020617;
+  border-right: 1px solid #1e293b;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 40px;
+  text-align: center;
+  color: #93c5fd;
+}
+
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 16px; /* space between buttons */
+}
+
+.sidebar-btn {
+  background: none;
+  border: 1px solid transparent;
+  color: #e5e7eb;
+  padding: 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.sidebar-btn:hover {
+  border-color: #2563eb;
+  background: rgba(37, 99, 235, 0.08);
+}
+
+/* ================================
+   MAIN CONTENT
+================================ */
+
+.home-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px;
+}
+
+.home-heading {
+  font-size: 42px;
+  font-weight: 600;
+  line-height: 1.2;
+  margin-bottom: 36px;
+  color: #f8fafc;
+}
+
+/* ================================
+   CTA BUTTON
+================================ */
+
+.cta-btn {
+  padding: 16px 36px;
+  font-size: 16px;
+  background: none;
+  color: #38bdf8;
+  border: 1px solid #38bdf8;
+  border-radius: 999px;
+  cursor: pointer;
+  font-family: "Courier New", monospace;
+  transition: all 0.2s ease;
+}
+
+.cta-btn:hover {
+  background: #38bdf8;
+  color: #020617;
+}
+/* ================================
+   HOME PAGE – NAV STATE
+================================ */
+
+.home-page {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  background: #020617;
+  color: #e5e7eb;
+}
+
+/* ================================
+   SIDEBAR
+================================ */
+
+.home-sidebar {
+  width: 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* vertical center */
+  gap: 24px;
+  background: #020617;
+}
+
+.back-btn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: none;
+  border: none;
+  color: #93c5fd;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.sidebar-btn {
+  width: 160px;
+  padding: 14px;
+  background: none;
+  border: 1px solid transparent;
+  color: #e5e7eb;
+  text-align: center;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sidebar-btn:hover {
+  border-color: #2563eb;
+  background: rgba(37, 99, 235, 0.08);
+}
+
+.sidebar-btn.active {
+  border-color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+  transform: scale(1.08);
+}
+
+/* ================================
+   MAIN CONTENT
+================================ */
+
+.home-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px;
+}
+
+.home-heading {
+  font-size: 42px;
+  margin-bottom: 36px;
+  line-height: 1.2;
+}
+
+/* ================================
+   CONTENT SECTIONS
+================================ */
+
+.content-section {
+  max-width: 600px;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.content-section h2 {
+  margin-bottom: 12px;
+  color: #93c5fd;
+}
+.project-title {
+  position: absolute;
+  top: 24px;
+  left: 28px;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #38bdf8; /* cyan-blue accent */
+}
+.samples-section {
+  margin-top: 48px;
+  width: 100%;
+  max-width: 1000px;
+  text-align: center;
+}
+
+.samples-heading {
+  font-size: 22px;
+  margin-bottom: 28px;
+  color: #e5e7eb;
+}
+
+.samples-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+}
+
+.sample-card {
+  background: #020617;
+  border-radius: 16px;
+  padding: 16px;
+  text-align: left;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.sample-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+}
+
+.sample-card img {
+  width: 100%;
+  border-radius: 12px;
+  margin-bottom: 12px;
+}
+
+.sample-card h4 {
+  font-size: 16px;
+  margin-bottom: 6px;
+  color: #f8fafc;
+}
+
+.sample-card p {
+  font-size: 14px;
+  color: #94a3b8;
+  line-height: 1.5;
+}
+/* ================================
+   HOME / LANDING PAGE
+================================ */
+
+/* Wrapper */
+.home-wrapper {
+  display: flex;
+  height: 100vh;
+  background-color: #0b0e14; /* deep black variant */
+  color: #e5e7eb;
+  overflow: hidden;
+}
+
+/* ================================
+   SIDEBAR
+================================ */
+.home-sidebar {
+  width: 220px;
+  padding: 20px;
+  background: #0f172a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Project name */
+.project-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #60a5fa; /* blue accent */
+  margin-bottom: 20px;
+}
+
+/* Sidebar buttons */
+.nav-btn {
+  width: 100%;
+  padding: 10px 14px;
+  background: transparent;
+  border: none;
+  color: #e5e7eb;
+  font-size: 14px;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.nav-btn:hover {
+  background: rgba(96, 165, 250, 0.15);
+  transform: translateY(-1px);
+}
+
+.nav-btn.active {
+  background: rgba(96, 165, 250, 0.25);
+  border-radius: 14px;
+}
+
+/* ================================
+   MAIN CONTENT
+================================ */
+.home-content {
+  flex: 1;
+  padding: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Fade animation for transitions */
+.fade {
+  animation: fadeIn 0.3s ease-in-out;
+  max-width: 900px;
+  width: 100%;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hero text */
+.hero-text {
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1.3;
+  text-align: center;
+  margin-bottom: 30px;
+  color: #f9fafb;
+}
+
+/* CTA button */
+.cta-btn {
+  display: block;
+  margin: 0 auto 40px;
+  padding: 14px 28px;
+  font-size: 16px;
+  border-radius: 999px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.cta-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(37, 99, 235, 0.35);
+}
+
+/* ================================
+   SAMPLE PROJECT CARDS
+================================ */
+.sample-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.sample-card {
+  background: #111827;
+  border-radius: 14px;
+  padding: 18px;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.sample-card:hover {
+  transform: translateY(-4px);
+  background: #1f2933;
+}
+
+.sample-card h4 {
+  margin-bottom: 8px;
+  color: #93c5fd;
+}
+
+/* ================================
+   ARCHITECTURE FLOW
+================================ */
+.arch-flow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 24px;
+}
+
+.arch-box {
+  padding: 14px 18px;
+  background: #1e293b;
+  border-radius: 12px;
+  font-size: 14px;
+  color: #e5e7eb;
+}
+
+.arch-note {
+  margin-top: 16px;
+  font-size: 13px;
+  color: #9ca3af;
+  text-align: center;
+}
+
+/* ================================
+   TEAM
+================================ */
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.team-card {
+  background: #111827;
+  padding: 16px;
+  border-radius: 12px;
+  text-align: center;
+  transition: transform 0.15s ease;
+}
+
+.team-card:hover {
+  transform: translateY(-3px);
+}
+
+/* ================================
+   LINKS
+================================ */
+.link-btn {
+  display: inline-block;
+  margin-right: 12px;
+  margin-top: 10px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.link-btn.secondary {
+  background: #374151;
+}
+
+/* ================================
+   RESPONSIVE
+================================ */
+@media (max-width: 768px) {
+  .home-wrapper {
+    flex-direction: column;
+  }
+
+  .home-sidebar {
+    width: 100%;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .home-content {
+    padding: 30px;
+  }
+
+  .hero-text {
+    font-size: 28px;
+  }
+}
+/* Page transition animation */
+.fade-in {
+  animation: fadeIn 0.35s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
