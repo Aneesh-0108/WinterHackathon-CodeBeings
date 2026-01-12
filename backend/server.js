@@ -29,7 +29,7 @@ const cors = require('cors');
 const crypto = require('crypto');
 
 // Import backend-logic adapter (treated as unreliable third-party service)
-const  processMessage  = require('./messageProcessor');
+const processMessage = require('./messageProcessor');
 
 // ============================================================================
 // EXPRESS SETUP
