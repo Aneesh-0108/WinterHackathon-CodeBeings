@@ -1308,3 +1308,625 @@ button:hover {
   overflow-x: hidden; /* 🚫 no horizontal scrollbar */
   resize: none; /* 🚫 user resize handle */
 }
+/* ✅ Center chat history text */
+.history-item {
+  justify-content: center;
+  text-align: center;
+}
+
+/* ✅ Tooltip base */
+.rename-btn,
+.delete-btn {
+  position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #cbd5f5;
+}
+
+/* ✅ Tooltip text */
+.rename-btn::after,
+.delete-btn::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 140%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #111827;
+  color: white;
+  font-size: 11px;
+  padding: 4px 6px;
+  border-radius: 6px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+
+.rename-btn:hover::after,
+.delete-btn:hover::after {
+  opacity: 1;
+}
+/* =====================================================
+   CHAT PAGE – FINAL FIXES (APPEND ONLY)
+   ===================================================== */
+
+/* ---------- CHAT BACKGROUND FIX ---------- */
+.layout {
+  background: #f5f5f0;
+}
+
+.layout.dark {
+  background: #343541;
+}
+
+/* ---------- EMPTY STATE (NO CHAT) ---------- */
+.messages.empty-state {
+  justify-content: center;
+  align-items: center;
+}
+
+.empty-chat-text {
+  font-size: 22px;
+  font-weight: 500;
+  color: #9ca3af;
+  text-align: center;
+}
+
+/* ---------- INPUT VISIBILITY CONTROL ---------- */
+.input-box.hidden {
+  display: none;
+}
+
+/* ---------- TEXTAREA CURSOR & CENTER FIX ---------- */
+.chat-input,
+.input-box textarea {
+  width: 100%;
+  display: block;
+  line-height: 1.4;
+  font-size: 14px;
+  padding: 14px 16px;
+  border-radius: 999px;
+  outline: none;
+}
+
+/* ---------- SEND BUTTON (SMALLER RADIUS) ---------- */
+.send-btn,
+.input-box button {
+  border-radius: 14px !important;
+  padding: 12px 20px;
+}
+
+/* ---------- CHAT HISTORY HOVER ANIMATION ---------- */
+.history-item {
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.history-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateX(3px);
+}
+
+/* ---------- CENTER CHAT TITLE ---------- */
+.history-item span {
+  flex: 1;
+  text-align: center;
+}
+
+/* ---------- RENAME & DELETE BUTTONS ---------- */
+.rename-btn,
+.delete-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #cbd5f5;
+  position: relative;
+  padding: 4px;
+}
+
+/* ---------- TOOLTIP ---------- */
+.rename-btn::after,
+.delete-btn::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 140%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #111827;
+  color: white;
+  font-size: 11px;
+  padding: 4px 6px;
+  border-radius: 6px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.rename-btn:hover::after,
+.delete-btn:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-2px);
+}
+
+/* ---------- DARK MODE MESSAGE FIX ---------- */
+.layout.dark .messages {
+  background: #202123;
+}
+
+.layout.dark .message.bot {
+  background: #2f2f33;
+  color: #e5e7eb;
+}
+
+.layout.dark .message.user {
+  background: #2563eb;
+}
+
+/* ---------- DARK MODE INPUT ---------- */
+.layout.dark .chat-input,
+.layout.dark .input-box textarea {
+  background: #2f2f33;
+  color: white;
+  border: 1px solid #3f3f46;
+}
+/* ======================================================
+   SIDEBAR WIDTH INCREASE
+====================================================== */
+.sidebar {
+  width: 300px; /* increased from default */
+}
+
+/* ======================================================
+   DARK / LIGHT TOGGLE BUTTON BG
+====================================================== */
+.icon-btn {
+  background: #1e293b;
+  color: white;
+  border-radius: 8px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.layout.dark .icon-btn {
+  background: #111827;
+}
+
+/* ======================================================
+   CHAT HISTORY HOVER + ANIMATION
+====================================================== */
+.history-item {
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.history-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateX(4px);
+}
+
+/* ======================================================
+   RENAME + DELETE BUTTONS
+====================================================== */
+.rename-btn,
+.delete-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #cbd5f5;
+  position: relative;
+}
+
+/* Tooltip */
+.rename-btn::after,
+.delete-btn::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 140%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #111827;
+  color: white;
+  font-size: 11px;
+  padding: 4px 6px;
+  border-radius: 6px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+
+.rename-btn:hover::after,
+.delete-btn:hover::after {
+  opacity: 1;
+}
+
+/* ======================================================
+   CHAT BACKGROUND COLORS
+====================================================== */
+.messages {
+  background: #f9fafb;
+}
+
+.layout.dark .messages {
+  background: #202123;
+}
+
+/* ======================================================
+   TEXT INPUT ALIGNMENT FIX (CENTER TYPING)
+====================================================== */
+.input-box textarea {
+  display: block;
+  align-items: unset;
+  line-height: 1.4;
+  padding: 14px 16px;
+  font-size: 14px;
+}
+
+/* ======================================================
+   SEND BUTTON BORDER RADIUS FIX
+====================================================== */
+.send-btn {
+  border-radius: 12px; /* reduced from pill */
+}
+
+/* ======================================================
+   EMPTY CHAT STATE
+====================================================== */
+.empty-state {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9ca3af;
+  font-size: 20px;
+  font-weight: 500;
+  text-align: center;
+}
+
+/* ======================================================
+   HIDE INPUT WHEN NO CHAT EXISTS
+====================================================== */
+.chat-container.no-chat .input-box {
+  display: none;
+}
+/* =====================================================
+   CHAT PAGE – FINAL FIXES (APPEND ONLY)
+   ===================================================== */
+
+/* ---------- CHAT BACKGROUND FIX ---------- */
+.layout {
+  background: #f5f5f0;
+}
+
+.layout.dark {
+  background: #343541;
+}
+
+/* ---------- EMPTY STATE (NO CHAT) ---------- */
+.messages.empty-state {
+  justify-content: center;
+  align-items: center;
+}
+
+.empty-chat-text {
+  font-size: 22px;
+  font-weight: 500;
+  color: #9ca3af;
+  text-align: center;
+}
+
+/* ---------- INPUT VISIBILITY CONTROL ---------- */
+.input-box.hidden {
+  display: none;
+}
+
+/* ---------- TEXTAREA CURSOR & CENTER FIX ---------- */
+.chat-input,
+.input-box textarea {
+  width: 100%;
+  display: block;
+  line-height: 1.4;
+  font-size: 14px;
+  padding: 14px 16px;
+  border-radius: 999px;
+  outline: none;
+}
+
+/* ---------- SEND BUTTON (SMALLER RADIUS) ---------- */
+.send-btn,
+.input-box button {
+  border-radius: 14px !important;
+  padding: 12px 20px;
+}
+
+/* ---------- CHAT HISTORY HOVER ANIMATION ---------- */
+.history-item {
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.history-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateX(3px);
+}
+
+/* ---------- CENTER CHAT TITLE ---------- */
+.history-item span {
+  flex: 1;
+  text-align: center;
+}
+
+/* ---------- RENAME & DELETE BUTTONS ---------- */
+.rename-btn,
+.delete-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #cbd5f5;
+  position: relative;
+  padding: 4px;
+}
+
+/* ---------- TOOLTIP ---------- */
+.rename-btn::after,
+.delete-btn::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 140%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #111827;
+  color: white;
+  font-size: 11px;
+  padding: 4px 6px;
+  border-radius: 6px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.rename-btn:hover::after,
+.delete-btn:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-2px);
+}
+
+/* ---------- DARK MODE MESSAGE FIX ---------- */
+.layout.dark .messages {
+  background: #202123;
+}
+
+.layout.dark .message.bot {
+  background: #2f2f33;
+  color: #e5e7eb;
+}
+
+.layout.dark .message.user {
+  background: #2563eb;
+}
+
+/* ---------- DARK MODE INPUT ---------- */
+.layout.dark .chat-input,
+.layout.dark .input-box textarea {
+  background: #2f2f33;
+  color: white;
+  border: 1px solid #3f3f46;
+}
+/* ================================
+ LOGOUT CONFIRMATION MODAL
+================================ */
+
+.modal-overlay {
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+}
+
+.modal {
+  background: #111827;
+  color: #e5e7eb;
+  border-radius: 16px;
+  padding: 28px;
+  width: 300px;
+  text-align: center;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+  animation: modalPop 0.25s ease-out;
+}
+
+@keyframes modalPop {
+  from {
+    transform: scale(0.92);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.modal p {
+  font-size: 16px;
+  margin-bottom: 18px;
+}
+/* ================================
+ ADMIN DASHBOARD
+================================ */
+
+.admin-wrapper {
+  padding: 40px 60px;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f172a, #020617);
+  color: #e5e7eb;
+}
+
+/* Fade-in animation */
+.fade-in {
+  animation: adminFade 0.5s ease forwards;
+}
+
+@keyframes adminFade {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Header */
+.admin-header {
+  margin-bottom: 36px;
+}
+
+.admin-header h1 {
+  font-size: 32px;
+  margin-bottom: 6px;
+}
+
+.admin-header p {
+  color: #94a3b8;
+}
+
+/* Stats */
+.admin-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+  margin-bottom: 40px;
+}
+
+.stat-card {
+  background: #020617;
+  border: 1px solid #1e293b;
+  padding: 20px;
+  border-radius: 16px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+}
+
+.stat-card h3 {
+  font-size: 14px;
+  color: #93c5fd;
+  margin-bottom: 10px;
+}
+
+.stat-card span {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.stat-card.warning span {
+  color: #facc15;
+}
+
+.stat-card.success span {
+  color: #22c55e;
+}
+
+/* Escalation list */
+.admin-list {
+  display: grid;
+  gap: 18px;
+}
+
+/* Card */
+.escalation-card {
+  background: #020617;
+  border: 1px solid #1e293b;
+  border-radius: 16px;
+  padding: 20px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.escalation-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.55);
+}
+
+/* Top row */
+.escalation-top {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.user {
+  font-size: 13px;
+  color: #60a5fa;
+}
+
+/* Status badge */
+.status {
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.status.pending {
+  background: rgba(250, 204, 21, 0.15);
+  color: #facc15;
+}
+
+.status.reviewed {
+  background: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
+}
+
+/* Query */
+.query {
+  font-size: 15px;
+  line-height: 1.5;
+  margin-bottom: 14px;
+}
+
+/* Confidence */
+.confidence {
+  font-size: 12px;
+  color: #94a3b8;
+  margin-bottom: 16px;
+}
+
+/* Actions */
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.approve-btn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.approve-btn:hover {
+  background: #1d4ed8;
+}
+
+.reject-btn {
+  background: #1e293b;
+  color: #e5e7eb;
+  border: 1px solid #334155;
+  padding: 8px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.reject-btn:hover {
+  background: #334155;
+}
+
+/* Empty */
+.empty-state {
+  text-align: center;
+  padding: 60px;
+  font-size: 16px;
+  color: #94a3b8;
+}

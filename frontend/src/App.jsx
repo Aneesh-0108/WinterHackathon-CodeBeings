@@ -1,6 +1,12 @@
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./firebase";
+import { loadChats, saveChats } from "./firestoreChats";
+
 import { useState, useEffect, useRef } from "react";
 import Home from "./Home";
+import UserLogin from "./UserLogin";
 import Login from "./Login";
+import AdminDashboard from "./AdminDashboard";
 
 function App() {
   /* ======================
@@ -11,8 +17,9 @@ function App() {
   /* ======================
      AUTH
   ====================== */
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
+  const [firebaseUser, setFirebaseUser] = useState(null);
+  const [authLoading, setAuthLoading] = useState(true);
 
   /* ======================
      CHAT
@@ -33,23 +40,52 @@ function App() {
   const currentChat = chats.find((c) => c.id === currentChatId);
 
   /* ======================
-     LOAD SESSION
+     LOAD THEME
   ====================== */
   useEffect(() => {
-    const savedUser = localStorage.getItem("cc-user");
     const savedTheme = localStorage.getItem("cloud-companion-theme");
-
-    if (savedUser) {
-      setUsername(savedUser);
-      setIsLoggedIn(true);
-      setPage("chat");
-      window.history.replaceState({ page: "chat" }, "");
-    } else {
-      window.history.replaceState({ page: "home" }, "");
-    }
-
     if (savedTheme) setDarkMode(savedTheme === "dark");
   }, []);
+
+  /* ======================
+     FIREBASE AUTH LISTENER
+  ====================== */
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        setFirebaseUser(user);
+        setUsername(user.displayName || user.email);
+        setPage("chat");
+
+        // 🔥 LOAD CHATS FROM FIRESTORE
+        const savedChats = await loadChats(user.uid);
+        if (savedChats.length > 0) {
+          setChats(savedChats);
+          setCurrentChatId(savedChats[0].id);
+        }
+
+        localStorage.setItem("cc-user", user.email);
+        window.history.replaceState({ page: "chat" }, "");
+      } else {
+        setFirebaseUser(null);
+        setChats([]);
+        setCurrentChatId(null);
+      }
+
+      setAuthLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  /* ======================
+     SAVE CHATS TO FIRESTORE
+  ====================== */
+  useEffect(() => {
+    if (firebaseUser && chats.length > 0) {
+      saveChats(firebaseUser.uid, chats);
+    }
+  }, [chats, firebaseUser]);
 
   /* ======================
      AUTOSCROLL
@@ -58,27 +94,23 @@ function App() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [currentChat?.messages, loading]);
 
+  /* ======================
+     LOGIN / LOGOUT
+  ====================== */
   function handleLogin(user) {
-    localStorage.setItem("cc-user", user);
     setUsername(user);
-    setIsLoggedIn(true);
     setPage("chat");
     window.history.pushState({ page: "chat" }, "");
   }
 
   function handleLogoutConfirmed() {
-    localStorage.removeItem("cc-user");
-    setIsLoggedIn(false);
-    setUsername("");
-    setChats([]);
-    setCurrentChatId(null);
-    setConfirmLogout(false);
+    localStorage.clear();
     setPage("home");
     window.history.pushState({ page: "home" }, "");
   }
 
   /* ======================
-     ADD CHAT
+     CHAT ACTIONS
   ====================== */
   function createNewChat() {
     const newChat = {
@@ -90,38 +122,32 @@ function App() {
     setCurrentChatId(newChat.id);
   }
 
-  /* ======================
-     DELETE CHAT
-  ====================== */
-  function deleteChat(chatId) {
-    setChats((prev) => prev.filter((c) => c.id !== chatId));
-    if (chatId === currentChatId) setCurrentChatId(null);
+  function deleteChatConfirmed() {
+    setChats((prev) => prev.filter((c) => c.id !== chatToDelete));
+    if (chatToDelete === currentChatId) setCurrentChatId(null);
+    setChatToDelete(null);
   }
 
   async function sendMessage() {
     if (!input.trim() || !currentChat) return;
 
-    const userText = input;
+    const text = input;
+    setInput("");
+    setLoading(true);
 
     setChats((prev) =>
       prev.map((c) =>
         c.id === currentChatId
-          ? {
-              ...c,
-              messages: [...c.messages, { sender: "user", text: userText }],
-            }
+          ? { ...c, messages: [...c.messages, { sender: "user", text }] }
           : c
       )
     );
-
-    setInput("");
-    setLoading(true);
 
     try {
       const res = await fetch("http://localhost:5000/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: userText }),
+        body: JSON.stringify({ message: text }),
       });
 
       const data = await res.json();
@@ -144,10 +170,7 @@ function App() {
                 ...c,
                 messages: [
                   ...c.messages,
-                  {
-                    sender: "bot",
-                    text: "⚠️ Unable to reach server. Please try again.",
-                  },
+                  { sender: "bot", text: "⚠️ Server error" },
                 ],
               }
             : c
@@ -158,43 +181,59 @@ function App() {
     }
   }
 
+  /* ======================
+     ROUTING
+  ====================== */
+  if (authLoading) {
+    return <div style={{ padding: 20 }}>Checking login…</div>;
+  }
+
   if (page === "home") {
     return (
-      <div className="page fade-in">
-        <Home onLoginClick={() => setPage("login")} />
-      </div>
+      <Home
+        onLoginClick={() => {
+          setPage("user-login");
+          window.history.pushState({ page: "user-login" }, "");
+        }}
+      />
     );
   }
 
-  if (page === "login") {
+  if (page === "user-login") {
     return (
-      <div className="page fade-in">
-        <Login onLogin={handleLogin} />
-      </div>
+      <UserLogin
+        onUserLogin={() => handleLogin("user")}
+        onAdminClick={() => {
+          setPage("login");
+          window.history.pushState({ page: "login" }, "");
+        }}
+      />
     );
   }
 
+  if (page === "login") return <Login onLogin={handleLogin} />;
+  if (page === "admin") return <AdminDashboard />;
+
+  /* ======================
+     CHAT UI
+  ====================== */
   return (
     <div className={`layout fade-in ${darkMode ? "dark" : ""}`}>
+      {/* SIDEBAR */}
       <div className="sidebar">
         <div className="sidebar-header">
           <span>{username}</span>
+
           <div className="sidebar-actions">
-            {/* ✅ FIX 1: Day/Night button polish */}
             <button
               className="icon-btn"
-              onClick={() => setDarkMode(!darkMode)}
-              style={{
-                width: "36px",
-                height: "36px",
-                borderRadius: "8px",
-                backgroundColor: darkMode ? "#1f2937" : "#111827",
-                color: "#fff",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                border: "none",
-                cursor: "pointer",
+              onClick={() => {
+                const next = !darkMode;
+                setDarkMode(next);
+                localStorage.setItem(
+                  "cloud-companion-theme",
+                  next ? "dark" : "light"
+                );
               }}
             >
               {darkMode ? "🌞" : "🌙"}
@@ -221,20 +260,22 @@ function App() {
             }`}
             onClick={() => setCurrentChatId(chat.id)}
           >
-            {chat.title}
-            <span
-              style={{ marginLeft: 8, cursor: "pointer" }}
+            <span style={{ flex: 1, textAlign: "center" }}>{chat.title}</span>
+
+            <button
+              className="delete-btn"
               onClick={(e) => {
                 e.stopPropagation();
-                deleteChat(chat.id);
+                setChatToDelete(chat.id);
               }}
             >
               🗑️
-            </span>
+            </button>
           </div>
         ))}
       </div>
 
+      {/* CHAT AREA */}
       <div className="chat-container">
         <div className="messages">
           {currentChat?.messages.map((m, i) => (
@@ -242,15 +283,13 @@ function App() {
               {m.text}
             </div>
           ))}
-          {loading && <div className="message bot">Typing...</div>}
+          {loading && <div className="message bot">Typing…</div>}
           <div ref={messagesEndRef} />
         </div>
 
         {currentChat && (
           <div className="input-box">
-            {/* ✅ FIX 2: Cursor vertical alignment */}
             <textarea
-              className="chat-input"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => {
@@ -258,13 +297,6 @@ function App() {
                   e.preventDefault();
                   sendMessage();
                 }
-              }}
-              style={{
-                height: "48px",
-                padding: "12px 14px",
-                lineHeight: "24px",
-                fontSize: "16px",
-                resize: "none",
               }}
             />
             <button className="send-btn" onClick={sendMessage}>
@@ -274,19 +306,24 @@ function App() {
         )}
       </div>
 
+      {/* LOGOUT MODAL */}
       {confirmLogout && (
         <div className="modal-overlay">
           <div className="modal">
             <p>Logout?</p>
-            <button className="menu-btn" onClick={handleLogoutConfirmed}>
-              Yes
-            </button>
-            <button
-              className="logout-btn"
-              onClick={() => setConfirmLogout(false)}
-            >
-              Cancel
-            </button>
+            <button onClick={handleLogoutConfirmed}>Yes</button>
+            <button onClick={() => setConfirmLogout(false)}>Cancel</button>
+          </div>
+        </div>
+      )}
+
+      {/* DELETE MODAL */}
+      {chatToDelete && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <p>Delete this chat?</p>
+            <button onClick={deleteChatConfirmed}>Delete</button>
+            <button onClick={() => setChatToDelete(null)}>Cancel</button>
           </div>
         </div>
       )}
