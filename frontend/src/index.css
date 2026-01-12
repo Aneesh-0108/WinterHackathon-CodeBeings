@@ -400,3 +400,213 @@ body {
     padding: 16px;
   }
 }
+/* ================================
+   HOME PAGE – EXTRA SECTIONS
+================================ */
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+  margin-top: 10px;
+}
+
+.team-card {
+  background: #020617;
+  border: 1px solid #1e293b;
+  padding: 14px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.team-card h4 {
+  margin-bottom: 4px;
+  font-size: 15px;
+}
+
+.team-card p {
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.link-group {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.link-btn {
+  display: inline-block;
+  padding: 10px 16px;
+  background: #1e293b;
+  color: white;
+  border-radius: 999px;
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.link-btn:hover {
+  background: #2563eb;
+}
+
+.link-btn.secondary {
+  background: #334155;
+}
+/* ================================
+   HOME / LANDING PAGE
+================================ */
+
+.landing-page {
+  height: 100vh;
+  width: 100vw;
+  background: linear-gradient(135deg, #020617, #0f172a);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.landing-card {
+  max-width: 760px;
+  width: 90%;
+  padding: 40px;
+  background: rgba(15, 23, 42, 0.95);
+  border-radius: 20px;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+}
+
+/* Title */
+.landing-card h1 {
+  font-size: 36px;
+  margin-bottom: 6px;
+}
+
+/* Tagline */
+.tagline {
+  font-size: 16px;
+  color: #cbd5f5;
+  margin-bottom: 26px;
+}
+
+/* Sections */
+.landing-section {
+  margin-bottom: 22px;
+}
+
+.landing-section h3 {
+  margin-bottom: 8px;
+  color: #93c5fd;
+}
+
+.landing-section p,
+.landing-section ul {
+  font-size: 14px;
+  color: #e5e7eb;
+  line-height: 1.6;
+}
+
+.landing-section ul {
+  padding-left: 18px;
+}
+
+.landing-section li {
+  margin-bottom: 4px;
+}
+
+/* ================================
+   TEAM SECTION
+================================ */
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+  margin-top: 12px;
+}
+
+.team-card {
+  background: #020617;
+  border: 1px solid #1e293b;
+  padding: 14px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.team-card h4 {
+  margin-bottom: 4px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.team-card p {
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+/* ================================
+   LINKS / BUTTONS
+================================ */
+
+.link-group {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.link-btn {
+  display: inline-block;
+  padding: 10px 16px;
+  background: #1e293b;
+  color: white;
+  border-radius: 999px;
+  font-size: 13px;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.link-btn:hover {
+  background: #2563eb;
+}
+
+.link-btn.secondary {
+  background: #334155;
+}
+
+/* ================================
+   LOGIN CTA
+================================ */
+
+.login-btn {
+  margin-top: 26px;
+  padding: 14px 26px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 999px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.login-btn:hover {
+  background: #1d4ed8;
+}
+
+/* ================================
+   MOBILE
+================================ */
+
+@media (max-width: 640px) {
+  .landing-card {
+    padding: 26px;
+  }
+
+  .landing-card h1 {
+    font-size: 28px;
+  }
+
+  .tagline {
+    font-size: 14px;
+  }
+}

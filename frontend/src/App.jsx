@@ -1,23 +1,37 @@
 import { useState, useEffect, useRef } from "react";
+import Home from "./Home";
 import Login from "./Login";
 
 function App() {
-  /* AUTH */
+  /* ======================
+     PAGE FLOW
+  ====================== */
+  const [showLanding, setShowLanding] = useState(true);
+
+  /* ======================
+     AUTH
+  ====================== */
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
 
-  /* CHAT */
+  /* ======================
+     CHAT
+  ====================== */
   const [chats, setChats] = useState([]);
   const [currentChatId, setCurrentChatId] = useState(null);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
 
-  /* UI */
+  /* ======================
+     UI
+  ====================== */
   const [darkMode, setDarkMode] = useState(false);
   const [confirmLogout, setConfirmLogout] = useState(false);
   const [chatToDelete, setChatToDelete] = useState(null);
 
-  /* RENAME */
+  /* ======================
+     RENAME
+  ====================== */
   const [editingChatId, setEditingChatId] = useState(null);
   const [editTitle, setEditTitle] = useState("");
 
@@ -26,7 +40,9 @@ function App() {
   const messagesEndRef = useRef(null);
   const currentChat = chats.find((c) => c.id === currentChatId);
 
-  /* LOAD SESSION */
+  /* ======================
+     LOAD SESSION
+  ====================== */
   useEffect(() => {
     const savedUser = localStorage.getItem("cc-user");
     const savedTheme = localStorage.getItem("cloud-companion-theme");
@@ -34,13 +50,17 @@ function App() {
     if (savedUser) {
       setUsername(savedUser);
       setIsLoggedIn(true);
+      setShowLanding(false); // skip Home if already logged in
     }
+
     if (savedTheme) {
       setDarkMode(savedTheme === "dark");
     }
   }, []);
 
-  /* LOAD CHATS */
+  /* ======================
+     LOAD CHATS
+  ====================== */
   useEffect(() => {
     if (!isLoggedIn || !username) return;
 
@@ -53,26 +73,35 @@ function App() {
     setHydrated(true);
   }, [isLoggedIn, username]);
 
-  /* SAVE CHATS */
+  /* ======================
+     SAVE CHATS
+  ====================== */
   useEffect(() => {
     if (!hydrated || !username) return;
+
     localStorage.setItem(
       `cloud-companion-chats-${username}`,
       JSON.stringify(chats)
     );
   }, [chats, hydrated, username]);
 
-  /* SAVE THEME */
+  /* ======================
+     SAVE THEME
+  ====================== */
   useEffect(() => {
     localStorage.setItem("cloud-companion-theme", darkMode ? "dark" : "light");
   }, [darkMode]);
 
-  /* AUTOSCROLL */
+  /* ======================
+     AUTOSCROLL
+  ====================== */
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [currentChat?.messages, loading]);
 
-  /* AUTH */
+  /* ======================
+     AUTH HANDLERS
+  ====================== */
   function handleLogin(user) {
     setUsername(user);
     setIsLoggedIn(true);
@@ -85,15 +114,19 @@ function App() {
     setChats([]);
     setCurrentChatId(null);
     setConfirmLogout(false);
+    setShowLanding(true);
   }
 
-  /* CHAT */
+  /* ======================
+     CHAT HANDLERS
+  ====================== */
   function createNewChat() {
     const newChat = {
       id: Date.now(),
       title: `Chat ${chats.length + 1}`,
       messages: [],
     };
+
     setChats((prev) => [...prev, newChat]);
     setCurrentChatId(newChat.id);
   }
@@ -112,12 +145,13 @@ function App() {
     setChats((prev) =>
       prev.map((c) => (c.id === chatId ? { ...c, title: editTitle.trim() } : c))
     );
+
     setEditingChatId(null);
   }
 
-  /* =========================
-     FRONTEND-ONLY BOT LOGIC
-     ========================= */
+  /* ======================
+     FRONTEND DEMO BOT
+  ====================== */
   function sendMessage() {
     if (!input.trim() || !currentChat) return;
 
@@ -152,16 +186,27 @@ function App() {
     }, 600);
   }
 
+  /* ======================
+     PAGE ROUTING (STATE)
+  ====================== */
+  if (showLanding) {
+    return <Home onLoginClick={() => setShowLanding(false)} />;
+  }
+
   if (!isLoggedIn) {
     return <Login onLogin={handleLogin} />;
   }
 
+  /* ======================
+     CHAT UI
+  ====================== */
   return (
     <div className={`layout ${darkMode ? "dark" : ""}`}>
       {/* SIDEBAR */}
       <div className="sidebar">
         <div className="sidebar-header">
           <span>{username}</span>
+
           <div className="sidebar-actions">
             <button
               className="dark-toggle"
@@ -169,6 +214,7 @@ function App() {
             >
               {darkMode ? "🌞" : "🌙"}
             </button>
+
             <button
               className="logout-btn"
               onClick={() => setConfirmLogout(true)}
@@ -217,7 +263,7 @@ function App() {
         ))}
       </div>
 
-      {/* CHAT */}
+      {/* CHAT AREA */}
       <div className="chat-container">
         <div className={`messages ${!currentChat ? "empty-state" : ""}`}>
           {!currentChat && (
