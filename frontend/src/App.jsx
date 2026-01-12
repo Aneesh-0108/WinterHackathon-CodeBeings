@@ -4,7 +4,7 @@ import Login from "./Login";
 
 function App() {
   /* ======================
-     PAGE STATE (NO ROUTER)
+     PAGE STATE
   ====================== */
   const [page, setPage] = useState("home");
 
@@ -60,7 +60,7 @@ function App() {
   }, []);
 
   /* ======================
-     BROWSER BACK / FORWARD
+     BROWSER NAV
   ====================== */
   useEffect(() => {
     const handlePopState = (e) => {
@@ -116,6 +116,7 @@ function App() {
      AUTH HANDLERS
   ====================== */
   function handleLogin(user) {
+    localStorage.setItem("cc-user", user);
     setUsername(user);
     setIsLoggedIn(true);
     setPage("chat");
@@ -129,7 +130,6 @@ function App() {
     setChats([]);
     setCurrentChatId(null);
     setConfirmLogout(false);
-
     setPage("home");
     window.history.pushState({ page: "home" }, "");
   }
@@ -143,7 +143,6 @@ function App() {
       title: `Chat ${chats.length + 1}`,
       messages: [],
     };
-
     setChats((prev) => [...prev, newChat]);
     setCurrentChatId(newChat.id);
   }
@@ -160,24 +159,28 @@ function App() {
     }
 
     setChats((prev) =>
-      prev.map((c) => (c.id === chatId ? { ...c, title: editTitle.trim() } : c))
+      prev.map((c) =>
+        c.id === chatId ? { ...c, title: editTitle.trim() } : c
+      )
     );
-
     setEditingChatId(null);
   }
 
   /* ======================
-     SEND MESSAGE (DEMO)
+     SEND MESSAGE (BACKEND)
   ====================== */
-  function sendMessage() {
+  async function sendMessage() {
     if (!input.trim() || !currentChat) return;
 
-    const userMsg = { sender: "user", text: input };
+    const userText = input;
 
     setChats((prev) =>
       prev.map((c) =>
         c.id === currentChatId
-          ? { ...c, messages: [...c.messages, userMsg] }
+          ? {
+            ...c,
+            messages: [...c.messages, { sender: "user", text: userText }],
+          }
           : c
       )
     );
@@ -185,22 +188,48 @@ function App() {
     setInput("");
     setLoading(true);
 
-    setTimeout(() => {
-      const botReply = {
-        sender: "bot",
-        text: "🤖 Backend integration coming next.",
-      };
+    try {
+      const res = await fetch("http://localhost:5000/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: userText }),
+      });
+
+      const data = await res.json();
 
       setChats((prev) =>
         prev.map((c) =>
           c.id === currentChatId
-            ? { ...c, messages: [...c.messages, botReply] }
+            ? {
+              ...c,
+              messages: [
+                ...c.messages,
+                { sender: "bot", text: data.reply },
+              ],
+            }
             : c
         )
       );
-
+    } catch {
+      setChats((prev) =>
+        prev.map((c) =>
+          c.id === currentChatId
+            ? {
+              ...c,
+              messages: [
+                ...c.messages,
+                {
+                  sender: "bot",
+                  text: "⚠️ Unable to reach server. Please try again.",
+                },
+              ],
+            }
+            : c
+        )
+      );
+    } finally {
       setLoading(false);
-    }, 600);
+    }
   }
 
   /* ======================
@@ -232,68 +261,33 @@ function App() {
   ====================== */
   return (
     <div className={`layout fade-in ${darkMode ? "dark" : ""}`}>
-      {/* SIDEBAR */}
       <div className="sidebar">
         <div className="sidebar-header">
           <span>{username}</span>
-
           <div className="sidebar-actions">
-            <button
-              className="dark-toggle"
-              onClick={() => setDarkMode(!darkMode)}
-            >
+            <button onClick={() => setDarkMode(!darkMode)}>
               {darkMode ? "🌞" : "🌙"}
             </button>
-
-            <button
-              className="logout-btn"
-              onClick={() => setConfirmLogout(true)}
-            >
-              Logout
-            </button>
+            <button onClick={() => setConfirmLogout(true)}>Logout</button>
           </div>
         </div>
 
-        <button className="menu-btn" onClick={createNewChat}>
-          ➕ New Chat
-        </button>
+        <button onClick={createNewChat}>➕ New Chat</button>
 
         {chats.map((chat) => (
           <div
             key={chat.id}
-            className={`history-item ${
-              chat.id === currentChatId ? "active" : ""
-            }`}
+            className={`history-item ${chat.id === currentChatId ? "active" : ""
+              }`}
             onClick={() => setCurrentChatId(chat.id)}
           >
-            <div className="chat-title">{chat.title}</div>
-
-            <button
-              className="rename-btn"
-              onClick={(e) => {
-                e.stopPropagation();
-                startRename(chat);
-              }}
-            >
-              ✏️
-            </button>
-
-            <button
-              className="delete-btn"
-              onClick={(e) => {
-                e.stopPropagation();
-                setChatToDelete(chat);
-              }}
-            >
-              🗑️
-            </button>
+            {chat.title}
           </div>
         ))}
       </div>
 
-      {/* CHAT AREA */}
       <div className="chat-container">
-        <div className={`messages ${!currentChat ? "empty-state" : ""}`}>
+        <div className="messages">
           {!currentChat && (
             <div className="start-message">Create a new chat to start 💬</div>
           )}
@@ -313,19 +307,11 @@ function App() {
           <div className="input-box">
             <textarea
               value={input}
-              onChange={(e) => {
-                setInput(e.target.value);
-                e.target.style.height = "auto";
-                e.target.style.height = `${Math.min(
-                  e.target.scrollHeight,
-                  160
-                )}px`;
-              }}
+              onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault();
                   sendMessage();
-                  e.target.style.height = "48px";
                 }
               }}
             />
@@ -334,50 +320,12 @@ function App() {
         )}
       </div>
 
-      {/* LOGOUT MODAL */}
       {confirmLogout && (
         <div className="modal-overlay">
           <div className="modal">
-            <p>Are you sure you want to logout?</p>
-            <div className="modal-actions">
-              <button className="confirm-btn" onClick={handleLogoutConfirmed}>
-                Yes
-              </button>
-              <button
-                className="cancel-btn"
-                onClick={() => setConfirmLogout(false)}
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* DELETE MODAL */}
-      {chatToDelete && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <p>Delete this chat?</p>
-            <div className="modal-actions">
-              <button
-                className="confirm-btn"
-                onClick={() => {
-                  setChats((prev) =>
-                    prev.filter((c) => c.id !== chatToDelete.id)
-                  );
-                  setChatToDelete(null);
-                }}
-              >
-                Yes
-              </button>
-              <button
-                className="cancel-btn"
-                onClick={() => setChatToDelete(null)}
-              >
-                Cancel
-              </button>
-            </div>
+            <p>Logout?</p>
+            <button onClick={handleLogoutConfirmed}>Yes</button>
+            <button onClick={() => setConfirmLogout(false)}>Cancel</button>
           </div>
         </div>
       )}
