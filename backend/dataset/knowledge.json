@@ -1,0 +1,288 @@
+{
+  "intents": [
+    {
+      "intent": "incorrect_profile_link",
+      "patterns": [
+        "shared profile url",
+        "profile id incorrect",
+        "wrong skills boost link",
+        "profile link issue"
+      ],
+      "responses": [
+        "Please ensure you share the public Google Cloud Skills Boost profile link or unique profile ID as instructed. Make sure your profile visibility is set to public."
+      ],
+      "category": "profile_setup",
+      "confidence": 0.85,
+      "escalate": false
+    },
+    {
+      "intent": "profile_not_public",
+      "patterns": [
+        "profile not public",
+        "make profile public",
+        "skills boost profile private"
+      ],
+      "responses": [
+        "Go to your Google Cloud Skills Boost account settings and enable public profile visibility. Save changes and recheck the profile link."
+      ],
+      "category": "profile_setup",
+      "confidence": 0.9,
+      "escalate": false
+    },
+    {
+      "intent": "account_verification_failed",
+      "patterns": [
+        "account not verified",
+        "verification failed",
+        "profile verification issue"
+      ],
+      "responses": [
+        "Ensure your Skills Boost account email matches the registered email for the program. If the issue continues, contact the organizer."
+      ],
+      "category": "account_verification",
+      "confidence": 0.8,
+      "escalate": true
+    },
+    {
+      "intent": "confirmation_email_not_received",
+      "patterns": [
+        "confirmation email not received",
+        "study jam email missing",
+        "no confirmation mail"
+      ],
+      "responses": [
+        "Please check your spam and promotions folder. If you still haven't received the email, wait for some time or contact the organizer."
+      ],
+      "category": "email_issue",
+      "confidence": 0.85,
+      "escalate": false
+    },
+    {
+      "intent": "credits_not_reflected",
+      "patterns": [
+        "credits not updated",
+        "credits showing zero",
+        "joining code credits"
+      ],
+      "responses": [
+        "Credits may take some time to reflect after applying the joining code. If the issue persists beyond 24 hours, contact the organizer."
+      ],
+      "category": "credits_issue",
+      "confidence": 0.7,
+      "escalate": true
+    },
+    {
+      "intent": "lab_attempt_limit_reached",
+      "patterns": [
+        "try again in two hours",
+        "lab attempt limit",
+        "lab limit reached"
+      ],
+      "responses": [
+        "You have reached the maximum number of lab attempts. Please wait for the specified cooldown period before retrying the lab."
+      ],
+      "category": "lab_issue",
+      "confidence": 0.9,
+      "escalate": false
+    },
+    {
+      "intent": "lab_attempt_count",
+      "patterns": [
+        "how many lab attempts",
+        "lab attempt count",
+        "maximum lab tries"
+      ],
+      "responses": [
+        "Each lab has a limited number of attempts. Avoid restarting labs repeatedly to prevent reaching the attempt limit."
+      ],
+      "category": "lab_access",
+      "confidence": 0.85,
+      "escalate": false
+    },
+    {
+      "intent": "study_jam_schedule",
+      "patterns": [
+        "study jam start date",
+        "program start",
+        "when does study jam begin"
+      ],
+      "responses": [
+        "Please refer to the official Study Jam announcement or communication shared by the organizers for the exact schedule."
+      ],
+      "category": "program_info",
+      "confidence": 0.9,
+      "escalate": false
+    },
+    {
+      "intent": "missed_live_session",
+      "patterns": [
+        "missed live session",
+        "session recording",
+        "missed workshop"
+      ],
+      "responses": [
+        "Live sessions are usually recorded or summarized. You can continue working on the labs independently and follow shared resources."
+      ],
+      "category": "sessions",
+      "confidence": 0.85,
+      "escalate": false
+    },
+    {
+      "intent": "study_jam_rewards",
+      "patterns": ["study jam rewards", "goodies", "certificates rewards"],
+      "responses": [
+        "Rewards and goodies depend on program completion criteria and organizer announcements. Please follow official updates for details."
+      ],
+      "category": "rewards",
+      "confidence": 0.9,
+      "escalate": false
+    },
+    {
+      "intent": "lab_stuck_provisioning",
+      "patterns": [
+        "lab stuck provisioning",
+        "provisioning lab resources",
+        "lab taking too long"
+      ],
+      "responses": [
+        "Lab provisioning may take a few minutes. Please wait and avoid refreshing frequently. If it remains stuck for a long time, end the lab and retry."
+      ],
+      "category": "lab_issue",
+      "confidence": 0.9,
+      "escalate": false
+    },
+    {
+      "intent": "lab_timer_expired",
+      "patterns": ["lab timer expired", "time over", "lab session ended"],
+      "responses": [
+        "If the lab timer expires, you will need to restart the lab and repeat the steps. Ensure you follow instructions efficiently to complete within the time limit."
+      ],
+      "category": "lab_issue",
+      "confidence": 0.9,
+      "escalate": false
+    },
+    {
+      "intent": "cloud_console_not_opening",
+      "patterns": [
+        "cloud console not opening",
+        "console blank screen",
+        "gcp console error"
+      ],
+      "responses": [
+        "Use Google Chrome in incognito mode, disable extensions, and ensure pop-ups are allowed. Restart the lab after making these changes."
+      ],
+      "category": "lab_issue",
+      "confidence": 0.85,
+      "escalate": false
+    },
+    {
+      "intent": "wrong_region_selected",
+      "patterns": ["wrong region", "region mismatch", "zone incorrect"],
+      "responses": [
+        "Ensure you select the exact region or zone mentioned in the lab instructions. Using a different region may cause task validation to fail."
+      ],
+      "category": "lab_issue",
+      "confidence": 0.9,
+      "escalate": false
+    },
+    {
+      "intent": "task_not_validated",
+      "patterns": [
+        "task not validated",
+        "check my progress failed",
+        "task incomplete"
+      ],
+      "responses": [
+        "Verify that all steps were completed exactly as mentioned in the instructions. Recheck resource names, regions, and settings before validating."
+      ],
+      "category": "lab_issue",
+      "confidence": 0.9,
+      "escalate": false
+    },
+    {
+      "intent": "badge_delay",
+      "patterns": ["badge delayed", "badge not updated", "badge pending"],
+      "responses": [
+        "Badge updates may take up to 24 hours after completing all required labs. Please wait and refresh your Skills Boost profile."
+      ],
+      "category": "badge_progress",
+      "confidence": 0.9,
+      "escalate": false
+    },
+    {
+      "intent": "path_not_completed",
+      "patterns": [
+        "learning path incomplete",
+        "path not completed",
+        "missing labs"
+      ],
+      "responses": [
+        "Ensure all labs in the learning path are completed successfully. Even one incomplete lab can prevent path completion."
+      ],
+      "category": "badge_progress",
+      "confidence": 0.9,
+      "escalate": false
+    },
+    {
+      "intent": "multiple_accounts_used",
+      "patterns": [
+        "multiple accounts",
+        "used different email",
+        "two skills boost accounts"
+      ],
+      "responses": [
+        "Using multiple accounts can cause tracking issues. Please use only the registered email for all labs and contact the organizer if needed."
+      ],
+      "category": "account_issue",
+      "confidence": 0.6,
+      "escalate": true
+    },
+    {
+      "intent": "lab_access_denied",
+      "patterns": ["access denied", "permission error", "not authorized"],
+      "responses": [
+        "This usually occurs due to account or permission issues. Please ensure you are logged in with the correct account. If the issue continues, contact the organizer."
+      ],
+      "category": "access_issue",
+      "confidence": 0.7,
+      "escalate": true
+    },
+    {
+      "intent": "can_pause_lab",
+      "patterns": ["pause lab", "resume later", "continue lab later"],
+      "responses": [
+        "Most labs cannot be paused. If you exit, the timer continues. It is recommended to start the lab only when you can complete it in one session."
+      ],
+      "category": "time_management",
+      "confidence": 0.85,
+      "escalate": false
+    },
+    {
+      "intent": "difference_arcade_skill_boost",
+      "patterns": [
+        "arcade vs skill boost",
+        "difference between arcade and skill boost"
+      ],
+      "responses": [
+        "Google Cloud Arcade is a gamified learning challenge, while Skill Boost is the learning platform that hosts the labs and courses."
+      ],
+      "category": "general_info",
+      "confidence": 0.95,
+      "escalate": false
+    },
+    {
+      "intent": "challenge_lab_help",
+      "patterns": [
+        "challenge lab help",
+        "challenge lab stuck",
+        "how to solve challenge lab"
+      ],
+      "responses": [
+        "Challenge labs test your understanding without step-by-step instructions. Review the objectives carefully and apply concepts learned in previous labs."
+      ],
+      "category": "general_info",
+      "confidence": 0.85,
+      "escalate": false
+    }
+  ]
+}
