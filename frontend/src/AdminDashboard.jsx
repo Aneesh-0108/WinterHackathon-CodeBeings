@@ -1,44 +1,64 @@
-import "./admin.css";
+import { useEffect, useState } from "react";
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  orderBy,
+  doc,
+  updateDoc,
+} from "firebase/firestore";
+import { db } from "./firebase";
 
-function AdminDashboard() {
+export default function AdminDashboard() {
+  const [escalations, setEscalations] = useState([]);
+
+  useEffect(() => {
+    loadEscalations();
+  }, []);
+
+  async function loadEscalations() {
+    const q = query(
+      collection(db, "escalated_queries"),
+      where("status", "==", "open"),
+      orderBy("timestamp", "desc")
+    );
+
+    const snap = await getDocs(q);
+    setEscalations(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
+  }
+
+  async function resolveEscalation(id) {
+    await updateDoc(doc(db, "escalated_queries", id), {
+      status: "resolved",
+      resolvedAt: new Date(),
+    });
+
+    setEscalations((prev) => prev.filter((e) => e.id !== id));
+  }
+
   return (
-    <div className="admin-page">
-      <div className="admin-header">
-        <h1 className="admin-title">Admin Dashboard</h1>
-        <button className="admin-logout">Logout</button>
-      </div>
+    <div>
+      <h2>Escalated Queries</h2>
 
-      <div className="admin-stats">
-        <div className="stat-card">
-          <div className="stat-title">Total Escalations</div>
-          <div className="stat-value">0</div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-title">Pending</div>
-          <div className="stat-value">0</div>
-        </div>
-      </div>
+      {escalations.map((q) => (
+        <div key={q.id} style={{ border: "1px solid #ccc", padding: 10 }}>
+          <p>
+            <b>User:</b> {q.userEmail}
+          </p>
+          <p>
+            <b>Question:</b> {q.question}
+          </p>
+          <p>
+            <b>Reason:</b> {q.reason}
+          </p>
+          <p>
+            <b>Confidence:</b> {q.confidence}
+          </p>
 
-      <div className="admin-table-wrapper">
-        <table className="admin-table">
-          <thead>
-            <tr>
-              <th>Query</th>
-              <th>User</th>
-              <th>Priority</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td colSpan="3" className="admin-empty">
-                No escalated queries yet
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+          <button onClick={() => resolveEscalation(q.id)}>Mark Resolved</button>
+        </div>
+      ))}
     </div>
   );
 }
-
-export default AdminDashboard;

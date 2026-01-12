@@ -1,3 +1,5 @@
+import { saveEscalatedQuery } from "./firestoreEscalations";
+
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebase";
 import { loadChats, saveChats } from "./firestoreChats";
@@ -135,6 +137,7 @@ function App() {
     setInput("");
     setLoading(true);
 
+    // add user message
     setChats((prev) =>
       prev.map((c) =>
         c.id === currentChatId
@@ -152,6 +155,7 @@ function App() {
 
       const data = await res.json();
 
+      // add bot reply
       setChats((prev) =>
         prev.map((c) =>
           c.id === currentChatId
@@ -162,7 +166,19 @@ function App() {
             : c
         )
       );
-    } catch {
+
+      // 🔥 ESCALATION HANDLING
+      if (data.escalated === true) {
+        await saveEscalatedQuery({
+          question: text,
+          reply: data.reply,
+          confidence: data.confidence,
+          reason: data.reason || "unknown",
+          user: firebaseUser,
+        });
+      }
+    } catch (err) {
+      console.error(err);
       setChats((prev) =>
         prev.map((c) =>
           c.id === currentChatId
