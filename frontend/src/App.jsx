@@ -3,7 +3,9 @@ import Home from "./Home";
 import Login from "./Login";
 
 function App() {
-  // 🆕 Track current page for browser navigation
+  /* ======================
+     PAGE STATE (NO ROUTER)
+  ====================== */
   const [page, setPage] = useState("home");
 
   /* ======================
@@ -34,8 +36,8 @@ function App() {
   const [editTitle, setEditTitle] = useState("");
 
   const [hydrated, setHydrated] = useState(false);
-
   const messagesEndRef = useRef(null);
+
   const currentChat = chats.find((c) => c.id === currentChatId);
 
   /* ======================
@@ -48,15 +50,13 @@ function App() {
     if (savedUser) {
       setUsername(savedUser);
       setIsLoggedIn(true);
-      setPage("chat"); // 🆕 restore page
+      setPage("chat");
       window.history.replaceState({ page: "chat" }, "");
     } else {
       window.history.replaceState({ page: "home" }, "");
     }
 
-    if (savedTheme) {
-      setDarkMode(savedTheme === "dark");
-    }
+    if (savedTheme) setDarkMode(savedTheme === "dark");
   }, []);
 
   /* ======================
@@ -64,9 +64,7 @@ function App() {
   ====================== */
   useEffect(() => {
     const handlePopState = (e) => {
-      if (e.state?.page) {
-        setPage(e.state.page);
-      }
+      if (e.state?.page) setPage(e.state.page);
     };
 
     window.addEventListener("popstate", handlePopState);
@@ -120,7 +118,7 @@ function App() {
   function handleLogin(user) {
     setUsername(user);
     setIsLoggedIn(true);
-    setPage("chat"); // 🆕
+    setPage("chat");
     window.history.pushState({ page: "chat" }, "");
   }
 
@@ -132,7 +130,7 @@ function App() {
     setCurrentChatId(null);
     setConfirmLogout(false);
 
-    setPage("home"); // 🆕
+    setPage("home");
     window.history.pushState({ page: "home" }, "");
   }
 
@@ -169,7 +167,7 @@ function App() {
   }
 
   /* ======================
-     FRONTEND DEMO BOT
+     SEND MESSAGE (DEMO)
   ====================== */
   function sendMessage() {
     if (!input.trim() || !currentChat) return;
@@ -206,7 +204,7 @@ function App() {
   }
 
   /* ======================
-     PAGE RENDERING (WITH ANIMATION)
+     PAGE RENDERING
   ====================== */
   if (page === "home") {
     return (
@@ -272,7 +270,6 @@ function App() {
 
             <button
               className="rename-btn"
-              data-tooltip="Rename"
               onClick={(e) => {
                 e.stopPropagation();
                 startRename(chat);
@@ -283,7 +280,6 @@ function App() {
 
             <button
               className="delete-btn"
-              data-tooltip="Delete"
               onClick={(e) => {
                 e.stopPropagation();
                 setChatToDelete(chat);
@@ -317,11 +313,19 @@ function App() {
           <div className="input-box">
             <textarea
               value={input}
-              onChange={(e) => setInput(e.target.value)}
+              onChange={(e) => {
+                setInput(e.target.value);
+                e.target.style.height = "auto";
+                e.target.style.height = `${Math.min(
+                  e.target.scrollHeight,
+                  160
+                )}px`;
+              }}
               onKeyDown={(e) => {
                 if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault();
                   sendMessage();
+                  e.target.style.height = "48px";
                 }
               }}
             />

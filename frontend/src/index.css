@@ -1113,3 +1113,198 @@ body {
     transform: translateY(0);
   }
 }
+/* ================================
+ LOGIN PAGE – DARK MODE
+ ================================ */
+
+.login-page {
+  height: 100vh;
+  width: 100vw;
+  background: radial-gradient(circle at top, #020617, #000000);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Card */
+.login-card {
+  width: 360px;
+  background: rgba(15, 23, 42, 0.9);
+  padding: 32px;
+  border-radius: 18px;
+  box-shadow: 0 0 40px rgba(37, 99, 235, 0.25);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.login-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0 60px rgba(37, 99, 235, 0.4);
+}
+
+/* Text */
+.login-title {
+  color: #e5e7eb;
+  text-align: center;
+  font-size: 24px;
+}
+
+.login-subtitle {
+  color: #94a3b8;
+  text-align: center;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+/* Inputs */
+.login-input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #020617;
+  border: 1px solid #1e293b;
+  color: #e5e7eb;
+  transition: border 0.25s ease, box-shadow 0.25s ease;
+}
+
+.login-input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.4);
+}
+
+/* Button */
+.login-btn {
+  margin-top: 6px;
+  padding: 12px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.login-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(37, 99, 235, 0.5);
+}
+
+.login-btn:active {
+  transform: scale(0.97);
+}
+
+/* Error */
+.login-error {
+  background: rgba(239, 68, 68, 0.15);
+  color: #fecaca;
+  padding: 8px;
+  border-radius: 10px;
+  font-size: 13px;
+  text-align: center;
+}
+
+/* Fade Animation */
+.fade-in {
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* ---------- MODALS (DARK MODE SAFE) ---------- */
+.modal {
+  background: #1e1e1e;
+  color: #f5f5f5;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+}
+
+.modal p {
+  color: #f5f5f5;
+  font-size: 15px;
+}
+
+.modal-actions button {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.confirm-btn {
+  background: #ef4444;
+  color: white;
+}
+
+.cancel-btn {
+  background: #2a2a2a;
+  color: #ddd;
+}
+/* ---------- CHAT INPUT FIX ---------- */
+.input-box textarea {
+  padding: 14px 16px;
+  line-height: 1.4;
+  resize: none;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+}
+/* ---------- CHAT INPUT FIX ---------- */
+.input-box textarea {
+  padding: 14px 16px;
+  line-height: 1.4;
+  resize: none;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+}
+/* ---------- MICRO INTERACTIONS ---------- */
+.history-item {
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.history-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+  transform: translateX(2px);
+}
+
+.send-btn,
+button {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+}
+/* Chat input textarea fixes */
+.input-box textarea {
+  resize: none; /* disable manual resize */
+  min-height: 48px; /* base height */
+  max-height: 160px; /* prevent infinite growth */
+  padding: 12px 16px; /* vertical + horizontal padding */
+  line-height: 1.4; /* proper cursor alignment */
+  display: flex;
+  align-items: center;
+  overflow-y: auto;
+  font-size: 14px;
+}
+.input-box textarea {
+  transition: height 0.15s ease;
+}
+/* Chat input textarea – remove scrollbar */
+.input-box textarea {
+  overflow-y: hidden; /* 🚫 no vertical scrollbar */
+  overflow-x: hidden; /* 🚫 no horizontal scrollbar */
+  resize: none; /* 🚫 user resize handle */
+}

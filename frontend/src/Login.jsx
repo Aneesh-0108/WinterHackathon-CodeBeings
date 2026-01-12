@@ -12,7 +12,7 @@ function Login({ onLogin }) {
 
   function handleLogin() {
     if (!USERS[username] || USERS[username] !== password) {
-      setError("❌ Invalid username or password");
+      setError("Invalid username or password");
       return;
     }
 
@@ -22,34 +22,30 @@ function Login({ onLogin }) {
 
   return (
     <div className="login-page">
-      <div className="login-card">
-        <h1>Cloud Companion ☁️</h1>
-        <p>Login to continue</p>
+      <div className="login-card fade-in">
+        <h1 className="login-title">Arcade Companion</h1>
+        <p className="login-subtitle">Sign in to continue</p>
 
         <input
+          className="login-input"
           placeholder="Username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
 
         <input
+          className="login-input"
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        {error && <div className="error">{error}</div>}
+        {error && <div className="login-error">{error}</div>}
 
-        <button onClick={handleLogin}>Login</button>
-
-        <p className="hint">
-          Demo users:
-          <br />
-          <b>admin / 1234</b>
-          <br />
-          <b>user1 / pass1</b>
-        </p>
+        <button className="login-btn" onClick={handleLogin}>
+          Login →
+        </button>
       </div>
     </div>
   );
