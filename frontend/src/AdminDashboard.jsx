@@ -11,7 +11,7 @@ import {
 } from "firebase/firestore";
 import { db } from "./firebase";
 
-export default function AdminDashboard() {
+export default function AdminDashboard({ onLogout }) {
   const [escalations, setEscalations] = useState([]);
 
   useEffect(() => {
@@ -39,27 +39,47 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div>
-      <h2>Escalated Queries</h2>
+    <div className="admin-page">
+      <div className="admin-header">
+        <h2>Escalated Queries</h2>
 
-      {escalations.map((q) => (
-        <div key={q.id} style={{ border: "1px solid #ccc", padding: 10 }}>
-          <p>
-            <b>User:</b> {q.userEmail}
-          </p>
-          <p>
-            <b>Question:</b> {q.question}
-          </p>
-          <p>
-            <b>Reason:</b> {q.reason}
-          </p>
-          <p>
-            <b>Confidence:</b> {q.confidence}
-          </p>
+        <button
+          className="logout-btn"
+          onClick={() => {
+            localStorage.clear();
+            window.location.href = "/";
+          }}
+        >
+          Logout
+        </button>
+      </div>
 
-          <button onClick={() => resolveEscalation(q.id)}>Mark Resolved</button>
-        </div>
-      ))}
+      <div className="admin-list">
+        {escalations.length === 0 && (
+          <p className="admin-empty">No open escalations 🎉</p>
+        )}
+
+        {escalations.map((q) => (
+          <div key={q.id} className="admin-card">
+            <p>
+              <b>User:</b> {q.userEmail}
+            </p>
+            <p>
+              <b>Question:</b> {q.question}
+            </p>
+            <p>
+              <b>Reason:</b> {q.reason}
+            </p>
+            <p>
+              <b>Confidence:</b> {q.confidence}
+            </p>
+
+            <button onClick={() => resolveEscalation(q.id)}>
+              Mark Resolved
+            </button>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

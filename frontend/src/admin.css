@@ -178,3 +178,69 @@
     font-size: 22px;
   }
 }
+.admin-page {
+  padding: 40px;
+  width: 100%;
+}
+
+.admin-container {
+  max-width: 900px;
+  margin: auto;
+}
+
+.admin-title {
+  margin-bottom: 20px;
+}
+
+.admin-card {
+  background: var(--card-bg, #fff);
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+
+.resolve-btn {
+  margin-top: 10px;
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+.admin-empty {
+  opacity: 0.7;
+  font-style: italic;
+}
+.admin-page {
+  padding: 24px;
+  min-height: 100vh;
+  background: var(--bg, #f7f7f7);
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.admin-list {
+  display: grid;
+  gap: 16px;
+}
+
+.admin-card {
+  background: white;
+  padding: 16px;
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
+}
+
+.admin-card button {
+  margin-top: 10px;
+}
+
+.admin-empty {
+  opacity: 0.7;
+}

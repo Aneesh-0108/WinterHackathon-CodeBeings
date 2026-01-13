@@ -14,6 +14,7 @@ function App() {
      PAGE STATE
   ====================== */
   const [page, setPage] = useState("home");
+  const [isAdmin, setIsAdmin] = useState(false);
 
   /* ======================
      AUTH
@@ -49,18 +50,16 @@ function App() {
   }, []);
 
   /* ======================
-     FIREBASE AUTH LISTENER
-     (ADMIN SAFE)
+     FIREBASE AUTH (USER ONLY)
   ====================== */
   useEffect(() => {
+    if (isAdmin) {
+      setAuthLoading(false);
+      return;
+    }
+
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       try {
-        // 🔒 If admin page, DO NOT let Firebase override
-        if (page === "admin") {
-          setAuthLoading(false);
-          return;
-        }
-
         if (user) {
           setFirebaseUser(user);
           setUsername(user.displayName || user.email);
@@ -86,16 +85,15 @@ function App() {
     });
 
     return () => unsubscribe();
-  }, [page]);
+  }, [isAdmin]);
 
   /* ======================
-     SAFETY TIMER (NO HANG)
+     SAFETY TIMER
   ====================== */
   useEffect(() => {
     const timer = setTimeout(() => {
       setAuthLoading(false);
     }, 3000);
-
     return () => clearTimeout(timer);
   }, []);
 
@@ -119,19 +117,22 @@ function App() {
      LOGIN / LOGOUT
   ====================== */
   function handleLogin(user) {
-    setUsername(user);
-
     if (user === "admin") {
+      setIsAdmin(true);
       setPage("admin");
       window.history.pushState({ page: "admin" }, "");
-    } else {
-      setPage("chat");
-      window.history.pushState({ page: "chat" }, "");
+      return;
     }
+
+    setIsAdmin(false);
+    setUsername(user);
+    setPage("chat");
+    window.history.pushState({ page: "chat" }, "");
   }
 
   function handleLogoutConfirmed() {
     localStorage.clear();
+    setIsAdmin(false);
     setUsername("");
     setFirebaseUser(null);
     setChats([]);
@@ -195,7 +196,7 @@ function App() {
         )
       );
 
-      if (data.escalated === true) {
+      if (data.escalated === true && firebaseUser) {
         await saveEscalatedQuery({
           question: text,
           reply: data.reply,
@@ -246,7 +247,17 @@ function App() {
   if (page === "admin") {
     return (
       <div className={`layout fade-in ${darkMode ? "dark" : ""}`}>
-        <AdminDashboard />
+        <AdminDashboard
+          onLogout={() => {
+            localStorage.clear();
+            setUsername("");
+            setFirebaseUser(null);
+            setChats([]);
+            setCurrentChatId(null);
+            setPage("home");
+            window.history.pushState({ page: "home" }, "");
+          }}
+        />
       </div>
     );
   }
