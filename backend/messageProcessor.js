@@ -1,6 +1,5 @@
 const fs = require("fs");
 const path = require("path");
-const { getAIResponse } = require("./services/aiService");
 
 let knowledge = { intents: [] };
 
