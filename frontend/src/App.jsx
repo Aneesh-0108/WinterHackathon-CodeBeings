@@ -1,5 +1,4 @@
 import { saveEscalatedQuery } from "./firestoreEscalations";
-
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebase";
 import { loadChats, saveChats } from "./firestoreChats";
@@ -51,37 +50,57 @@ function App() {
 
   /* ======================
      FIREBASE AUTH LISTENER
+     (ADMIN SAFE)
   ====================== */
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        setFirebaseUser(user);
-        setUsername(user.displayName || user.email);
-        setPage("chat");
-
-        // 🔥 LOAD CHATS FROM FIRESTORE
-        const savedChats = await loadChats(user.uid);
-        if (savedChats.length > 0) {
-          setChats(savedChats);
-          setCurrentChatId(savedChats[0].id);
+      try {
+        // 🔒 If admin page, DO NOT let Firebase override
+        if (page === "admin") {
+          setAuthLoading(false);
+          return;
         }
 
-        localStorage.setItem("cc-user", user.email);
-        window.history.replaceState({ page: "chat" }, "");
-      } else {
-        setFirebaseUser(null);
-        setChats([]);
-        setCurrentChatId(null);
-      }
+        if (user) {
+          setFirebaseUser(user);
+          setUsername(user.displayName || user.email);
+          setPage("chat");
 
-      setAuthLoading(false);
+          const savedChats = await loadChats(user.uid);
+          if (savedChats.length > 0) {
+            setChats(savedChats);
+            setCurrentChatId(savedChats[0].id);
+          }
+        } else {
+          setFirebaseUser(null);
+          setChats([]);
+          setCurrentChatId(null);
+          setPage("home");
+        }
+      } catch (err) {
+        console.error("Auth error:", err);
+        setPage("home");
+      } finally {
+        setAuthLoading(false);
+      }
     });
 
     return () => unsubscribe();
+  }, [page]);
+
+  /* ======================
+     SAFETY TIMER (NO HANG)
+  ====================== */
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setAuthLoading(false);
+    }, 3000);
+
+    return () => clearTimeout(timer);
   }, []);
 
   /* ======================
-     SAVE CHATS TO FIRESTORE
+     SAVE CHATS
   ====================== */
   useEffect(() => {
     if (firebaseUser && chats.length > 0) {
@@ -101,13 +120,24 @@ function App() {
   ====================== */
   function handleLogin(user) {
     setUsername(user);
-    setPage("chat");
-    window.history.pushState({ page: "chat" }, "");
+
+    if (user === "admin") {
+      setPage("admin");
+      window.history.pushState({ page: "admin" }, "");
+    } else {
+      setPage("chat");
+      window.history.pushState({ page: "chat" }, "");
+    }
   }
 
   function handleLogoutConfirmed() {
     localStorage.clear();
+    setUsername("");
+    setFirebaseUser(null);
+    setChats([]);
+    setCurrentChatId(null);
     setPage("home");
+    setConfirmLogout(false);
     window.history.pushState({ page: "home" }, "");
   }
 
@@ -137,7 +167,6 @@ function App() {
     setInput("");
     setLoading(true);
 
-    // add user message
     setChats((prev) =>
       prev.map((c) =>
         c.id === currentChatId
@@ -155,7 +184,6 @@ function App() {
 
       const data = await res.json();
 
-      // add bot reply
       setChats((prev) =>
         prev.map((c) =>
           c.id === currentChatId
@@ -167,7 +195,6 @@ function App() {
         )
       );
 
-      // 🔥 ESCALATION HANDLING
       if (data.escalated === true) {
         await saveEscalatedQuery({
           question: text,
@@ -179,19 +206,6 @@ function App() {
       }
     } catch (err) {
       console.error(err);
-      setChats((prev) =>
-        prev.map((c) =>
-          c.id === currentChatId
-            ? {
-                ...c,
-                messages: [
-                  ...c.messages,
-                  { sender: "bot", text: "⚠️ Server error" },
-                ],
-              }
-            : c
-        )
-      );
     } finally {
       setLoading(false);
     }
@@ -228,7 +242,14 @@ function App() {
   }
 
   if (page === "login") return <Login onLogin={handleLogin} />;
-  if (page === "admin") return <AdminDashboard />;
+
+  if (page === "admin") {
+    return (
+      <div className={`layout fade-in ${darkMode ? "dark" : ""}`}>
+        <AdminDashboard />
+      </div>
+    );
+  }
 
   /* ======================
      CHAT UI
@@ -277,7 +298,6 @@ function App() {
             onClick={() => setCurrentChatId(chat.id)}
           >
             <span style={{ flex: 1, textAlign: "center" }}>{chat.title}</span>
-
             <button
               className="delete-btn"
               onClick={(e) => {

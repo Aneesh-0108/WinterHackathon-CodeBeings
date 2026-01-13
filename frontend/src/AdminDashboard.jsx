@@ -1,3 +1,4 @@
+import "./admin.css";
 import { useEffect, useState } from "react";
 import {
   collection,
