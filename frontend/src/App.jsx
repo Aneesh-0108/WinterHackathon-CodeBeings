@@ -50,6 +50,34 @@ function App() {
   }, []);
 
   /* ======================
+ RESTORE SESSION (USER + ADMIN)
+ ====================== */
+  useEffect(() => {
+    const savedRole = localStorage.getItem("cc-role");
+    const savedUser = localStorage.getItem("cc-username");
+    const savedChats = localStorage.getItem("cc-chats");
+
+    if (savedRole === "admin") {
+      setIsAdmin(true);
+      setPage("admin");
+      setAuthLoading(false);
+      return;
+    }
+
+    if (savedUser) {
+      setUsername(savedUser);
+      setPage("chat");
+
+      if (savedChats) {
+        setChats(JSON.parse(savedChats));
+        setCurrentChatId(JSON.parse(savedChats)[0]?.id || null);
+      }
+    }
+
+    setAuthLoading(false);
+  }, []);
+
+  /* ======================
      FIREBASE AUTH (USER ONLY)
   ====================== */
   useEffect(() => {
@@ -100,7 +128,14 @@ function App() {
   /* ======================
      SAVE CHATS
   ====================== */
+  /* ======================
+ SAVE CHATS (Firestore + Local)
+ ====================== */
   useEffect(() => {
+    if (chats.length > 0) {
+      localStorage.setItem("cc-chats", JSON.stringify(chats));
+    }
+
     if (firebaseUser && chats.length > 0) {
       saveChats(firebaseUser.uid, chats);
     }
@@ -120,6 +155,9 @@ function App() {
     if (user === "admin") {
       setIsAdmin(true);
       setPage("admin");
+
+      localStorage.setItem("cc-role", "admin");
+
       window.history.pushState({ page: "admin" }, "");
       return;
     }
@@ -127,6 +165,10 @@ function App() {
     setIsAdmin(false);
     setUsername(user);
     setPage("chat");
+
+    localStorage.setItem("cc-role", "user");
+    localStorage.setItem("cc-username", user);
+
     window.history.pushState({ page: "chat" }, "");
   }
 

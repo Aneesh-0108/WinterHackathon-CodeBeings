@@ -13,29 +13,56 @@ import { db } from "./firebase";
 
 export default function AdminDashboard({ onLogout }) {
   const [escalations, setEscalations] = useState([]);
-
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   useEffect(() => {
     loadEscalations();
+
+    // 🔁 Auto refresh every 10 seconds (keeps dashboard fresh)
+    const interval = setInterval(loadEscalations, 10000);
+    return () => clearInterval(interval);
   }, []);
 
   async function loadEscalations() {
-    const q = query(
-      collection(db, "escalated_queries"),
-      where("status", "==", "open"),
-      orderBy("timestamp", "desc")
-    );
+    try {
+      const q = query(
+        collection(db, "escalated_queries"),
+        where("status", "==", "open")
+      );
 
-    const snap = await getDocs(q);
-    setEscalations(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
+      const snap = await getDocs(q);
+      setEscalations(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
+    } catch (err) {
+      console.error("Failed to load escalations", err);
+      setError("Failed to load escalations");
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function resolveEscalation(id) {
-    await updateDoc(doc(db, "escalated_queries", id), {
-      status: "resolved",
-      resolvedAt: new Date(),
-    });
+    try {
+      await updateDoc(doc(db, "escalated_queries", id), {
+        status: "resolved",
+        resolvedAt: new Date(),
+      });
 
-    setEscalations((prev) => prev.filter((e) => e.id !== id));
+      // ✅ Instantly update UI
+      setEscalations((prev) => prev.filter((e) => e.id !== id));
+    } catch (err) {
+      console.error("Failed to resolve escalation:", err);
+      alert("Failed to resolve escalation");
+    }
+  }
+
+  function handleLogout() {
+    localStorage.clear();
+
+    if (typeof onLogout === "function") {
+      onLogout(); // ✅ proper app routing
+    } else {
+      window.location.href = "/";
+    }
   }
 
   return (
@@ -43,19 +70,15 @@ export default function AdminDashboard({ onLogout }) {
       <div className="admin-header">
         <h2>Escalated Queries</h2>
 
-        <button
-          className="logout-btn"
-          onClick={() => {
-            localStorage.clear();
-            window.location.href = "/";
-          }}
-        >
+        <button className="logout-btn" onClick={handleLogout}>
           Logout
         </button>
       </div>
 
       <div className="admin-list">
-        {escalations.length === 0 && (
+        {loading && <p className="admin-empty">Loading escalations…</p>}
+
+        {!loading && escalations.length === 0 && (
           <p className="admin-empty">No open escalations 🎉</p>
         )}
 

@@ -244,3 +244,135 @@
 .admin-empty {
   opacity: 0.7;
 }
+/* ===============================
+   ADMIN DASHBOARD – BASE
+================================ */
+
+.admin-page {
+  padding: 32px;
+  min-height: 100vh;
+  background: #f6f7fb;
+  transition: background 0.3s ease;
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.admin-header h2 {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.logout-btn {
+  background: #e53935;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.logout-btn:hover {
+  opacity: 0.9;
+}
+
+/* ===============================
+   ESCALATION LIST
+================================ */
+
+.admin-list {
+  display: grid;
+  gap: 16px;
+}
+
+.admin-card {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 16px 18px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  transition: transform 0.15s ease;
+}
+
+.admin-card:hover {
+  transform: translateY(-2px);
+}
+
+.admin-card p {
+  margin: 6px 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.admin-card b {
+  font-weight: 600;
+}
+
+.admin-card button {
+  margin-top: 10px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: none;
+  background: #1976d2;
+  color: white;
+  cursor: pointer;
+}
+
+.admin-card button:hover {
+  opacity: 0.9;
+}
+
+/* ===============================
+   EMPTY STATE
+================================ */
+
+.admin-empty {
+  color: #666;
+  font-style: italic;
+}
+
+/* ===============================
+   🌙 DARK MODE SUPPORT
+   (inherits from .layout.dark)
+================================ */
+
+.dark .admin-page {
+  background: #0f172a;
+}
+
+.dark .admin-header h2 {
+  color: #e5e7eb;
+}
+
+.dark .admin-card {
+  background: #111827;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+}
+
+.dark .admin-card p {
+  color: #d1d5db;
+}
+
+.dark .admin-empty {
+  color: #9ca3af;
+}
+
+.dark .admin-card button {
+  background: #2563eb;
+}
+
+.dark .logout-btn {
+  background: #dc2626;
+}
+.dark .admin-header h2 {
+  color: #e5e7eb; /* light text on dark background */
+}
+.admin-header h2 {
+  color: #111827;
+  font-weight: 700;
+}
