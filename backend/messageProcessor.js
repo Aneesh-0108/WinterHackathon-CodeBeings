@@ -1,23 +1,9 @@
-/**
- * BACKEND-LOGIC: Intent Detection Layer
- * ------------------------------------
- * Responsibilities:
- * - Load knowledge base
- * - Detect intent
- * - Return response object
- *
- * Must NEVER crash backend-core
- */
-
 const fs = require("fs");
 const path = require("path");
 
-// ==============================
-// LOAD KNOWLEDGE BASE SAFELY
-// ==============================
-
 let knowledge = { intents: [] };
 
+// Load knowledge base safely
 try {
   const knowledgePath = path.join(__dirname, "dataset", "knowledge.json");
   const rawData = fs.readFileSync(knowledgePath, "utf-8");
@@ -31,10 +17,7 @@ try {
   knowledge = { intents: [] }; // fail safe
 }
 
-// ==============================
-// INTENT MATCHER
-// ==============================
-
+// Rule-based intent matcher
 function detectIntent(message) {
   const normalized = message.toLowerCase();
 

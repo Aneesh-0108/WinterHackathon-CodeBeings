@@ -45,30 +45,71 @@ You can replace the README with the recommended template below and update the co
 ### Recommended Format for README:
 Use the structure below:
 ```
- # Project Name
+ # Arcade Companion– Hybrid AI Chatbot for Google Cloud Arcade & Skill Boost
 
 ## Description
-Briefly explain what your project does, the problem it solves, and who it is for.
+Arcade Assist is a hybrid AI-powered chatbot designed to support participants of Google Cloud Arcade and Skill Boost programs by providing instant, accurate answers to common queries.
+
+Participants often face repeated issues related to labs, badges, eligibility, deadlines, and progress tracking, which leads to repetitive questions in community groups and delays in responses from organizers.
+This project solves that problem by combining a rule-based knowledge system with AI intelligence to understand user queries, classify them, and respond safely.
+
+When a query cannot be resolved automatically or requires account-level verification, the chatbot responsibly escalates the issue and logs it for organizers, ensuring human-in-the-loop support.
+
+Target Users:
+
+Google Cloud Arcade & Skill Boost participants
+
+Community organizers and mentors
 
 # Demo Video Link: <insert Google Drive link to the demo video of the working of your project>
 
 ## Features
-- Key feature 1
-- Key feature 2
-- Key feature 3
+✅ Instant Query Resolution using a curated, domain-specific knowledge base
+🧠 Hybrid AI Architecture (Rule-based + AI fallback) for safe and explainable responses
+🚨 Smart Escalation Handling for unresolved or account-specific issues
+📊 Firebase Logging Dashboard for organizers to track escalated queries
+⚡ Lightweight Chat Interface for real-time interaction
+🛡️ Responsible AI Design – avoids hallucinations and unsafe answers
+- 
 
 ## Tech Stack
-List the technologies, frameworks, and tools used in the project.
+Frontend
+
+React (Vite)
+
+HTML, CSS
+
+Fetch API for backend communication
+
+Backend
+
+Node.js
+
+Express.js
+
+Modular service-based architecture
+
+AI & Logic
+
+Rule-based intent classification
+
+AI fallback for low-confidence queries
+
+Keyword-driven knowledge lookup (knowledge.json)
 
 ## Google Technologies Used
-> ⚠️ Using Google products is **mandatory** for this hackathon.
+
 
 List the Google technologies you used and clearly explain **why** you chose them.
 
-**Example:**
-- **Firebase Authentication** – For secure and easy user authentication
-- **Firebase Firestore** – To store and manage real-time data
-- **Google Maps API** – To enable location-based features
+Firebase Firestore –
+Used to log escalated queries in real time, enabling organizers to review unresolved issues and provide manual assistance.
+
+Google Cloud (Conceptual Integration) –
+The chatbot is designed to be cloud-ready and can be deployed on Google Cloud Run or App Engine for scalable backend hosting.
+
+Google Gemini API (Optional / Controlled Use) –
+Used as a fallback AI layer to assist with rephrasing or general guidance when rule-based responses are insufficient, while maintaining safety through escalation logic.
 
 ## Setup Instructions
 Steps to run the project locally:
@@ -78,9 +119,9 @@ Steps to run the project locally:
 4. Run the project
 
 ## Team Members
-- Name 1
-- Name 2
-- Name 3
+- Aneesh Hebbar
+- Akshaj Shetty
+- Deekshith Shetty
 ```
 
 

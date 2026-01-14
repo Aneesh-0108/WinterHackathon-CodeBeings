@@ -129,7 +129,11 @@
     },
     {
       "intent": "study_jam_rewards",
-      "patterns": ["study jam rewards", "goodies", "certificates rewards"],
+      "patterns": [
+        "study jam rewards",
+        "goodies",
+        "certificates rewards"
+      ],
       "responses": [
         "Rewards and goodies depend on program completion criteria and organizer announcements. Please follow official updates for details."
       ],
@@ -153,7 +157,11 @@
     },
     {
       "intent": "lab_timer_expired",
-      "patterns": ["lab timer expired", "time over", "lab session ended"],
+      "patterns": [
+        "lab timer expired",
+        "time over",
+        "lab session ended"
+      ],
       "responses": [
         "If the lab timer expires, you will need to restart the lab and repeat the steps. Ensure you follow instructions efficiently to complete within the time limit."
       ],
@@ -177,7 +185,11 @@
     },
     {
       "intent": "wrong_region_selected",
-      "patterns": ["wrong region", "region mismatch", "zone incorrect"],
+      "patterns": [
+        "wrong region",
+        "region mismatch",
+        "zone incorrect"
+      ],
       "responses": [
         "Ensure you select the exact region or zone mentioned in the lab instructions. Using a different region may cause task validation to fail."
       ],
@@ -201,7 +213,11 @@
     },
     {
       "intent": "badge_delay",
-      "patterns": ["badge delayed", "badge not updated", "badge pending"],
+      "patterns": [
+        "badge delayed",
+        "badge not updated",
+        "badge pending"
+      ],
       "responses": [
         "Badge updates may take up to 24 hours after completing all required labs. Please wait and refresh your Skills Boost profile."
       ],
@@ -239,7 +255,11 @@
     },
     {
       "intent": "lab_access_denied",
-      "patterns": ["access denied", "permission error", "not authorized"],
+      "patterns": [
+        "access denied",
+        "permission error",
+        "not authorized"
+      ],
       "responses": [
         "This usually occurs due to account or permission issues. Please ensure you are logged in with the correct account. If the issue continues, contact the organizer."
       ],
@@ -249,7 +269,11 @@
     },
     {
       "intent": "can_pause_lab",
-      "patterns": ["pause lab", "resume later", "continue lab later"],
+      "patterns": [
+        "pause lab",
+        "resume later",
+        "continue lab later"
+      ],
       "responses": [
         "Most labs cannot be paused. If you exit, the timer continues. It is recommended to start the lab only when you can complete it in one session."
       ],
