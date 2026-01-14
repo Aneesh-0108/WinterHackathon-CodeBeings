@@ -3,21 +3,27 @@ const path = require("path");
 
 let knowledge = { intents: [] };
 
-// Load knowledge base safely
+// ==============================
+// LOAD KNOWLEDGE BASE SAFELY
+// ==============================
 try {
   const knowledgePath = path.join(__dirname, "dataset", "knowledge.json");
   const rawData = fs.readFileSync(knowledgePath, "utf-8");
-  knowledge = JSON.parse(rawData);
+  const parsed = JSON.parse(rawData);
 
-  if (!Array.isArray(knowledge.intents)) {
+  if (!Array.isArray(parsed.intents)) {
     throw new Error("Invalid knowledge.json format: intents must be an array");
   }
+
+  knowledge = parsed;
 } catch (err) {
   console.error("❌ Failed to load knowledge.json:", err.message);
-  knowledge = { intents: [] }; // fail safe
+  knowledge = { intents: [] }; // fail-safe
 }
 
-// Rule-based intent matcher
+// ==============================
+// RULE-BASED INTENT DETECTION
+// ==============================
 function detectIntent(message) {
   const normalized = message.toLowerCase();
 
@@ -36,27 +42,25 @@ function detectIntent(message) {
     }
   }
 
-  // ==============================
-  // FALLBACK (NO INTENT MATCH)
-  // ==============================
+  return null; // no intent matched
+}
 
+// ==============================
+// EXPORTED ENTRY POINT (USED BY server.js)
+// ==============================
+module.exports = async function processMessage(message) {
+  const intentResult = detectIntent(message);
+
+  // ✅ Intent matched
+  if (intentResult) {
+    return intentResult;
+  }
+
+  // ⚠️ Fallback (no intent matched)
   return {
     reply:
       "I'm not fully confident about this request. A human agent will assist you shortly.",
     escalated: true,
     confidence: 0.0,
-  };
-}
-
-// ==============================
-// EXPORTED ENTRY POINT
-// ==============================
-
-module.exports = function processMessage(message) {
-  return {
-    reply: "I’m not confident about this. An admin will review it.",
-    confidence: 0.25,
-    escalated: true,
-    reason: "rule_fallback",
   };
 };
